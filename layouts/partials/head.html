@@ -24,6 +24,10 @@
     <link rel="stylesheet" href="{{ .Site.BaseURL }}fancybox/jquery.fancybox.css">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+
+    <!-- GA仕込む -->
+    {{ partial "custom/my_google_analytics.html" . }}
+
     {{ template "_internal/opengraph.html" . }}
     {{ template "_internal/google_news.html" . }}
     {{ template "_internal/schema.html" . }}
