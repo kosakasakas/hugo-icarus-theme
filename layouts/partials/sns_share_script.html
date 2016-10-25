@@ -1,0 +1,88 @@
+<!--シェア数の取得-->
+<script>
+//Twitterのシェア数を取得
+function getTwitterCount(url, selcter) {
+  $.ajax({
+  url:'https://jsoon.digitiminimi.com/twitter/count.json',
+  dataType:'jsonp',
+  data:{
+    url:url
+  }}).then(
+  function(res){$( selcter ).text( res.count || 0 );},
+  function(){$( selcter ).text('0');}
+  );
+}
+//HatenaBookMarkのシェア数
+function getHatenaBookmarkCount(entryUrl, selcter) {
+  entryUrl = 'http://api.b.st-hatena.com/entry.count?url=' + encodeURIComponent(entryUrl)
+  $.ajax({
+    url:entryUrl,
+    dataType:'jsonp',
+  }).then(
+    function(result){ $(selcter).text(result || 0); },
+    function(){ $(selcter).text('0'); }
+  );
+}
+//Facebookのシェア数
+function getFacebookCount(entryUrl, selcter) {
+  entryUrl = 'https://graph.facebook.com/' + encodeURIComponent(entryUrl)
+  $.ajax({
+    url:entryUrl,
+    dataType:'jsonp'
+  }).then(
+    function(result){
+        if(result.share && result.share.share_count) {
+            $(selcter).text(result.share.share_count);
+        } else {
+            $(selcter).text('0');
+        }
+    },
+    function(){ $(selcter).text('0'); }
+  );
+}
+//Google＋のシェア数を取得
+function getGoogleplusCount(url, selcter) {
+  jQuery.ajax({
+    type: "get", dataType: "xml",
+    url: "http://query.yahooapis.com/v1/public/yql",
+    data: {
+      q: "SELECT content FROM data.headers WHERE url='https://plusone.google.com/_/+1/fastbutton?hl=ja&url=" + url + "' and ua='#Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.154 Safari/537.36'",
+      format: "xml",
+      env: "http://datatables.org/alltables.env"
+    },
+    success: function (data) {
+      var content = jQuery(data).find("content").text();
+      var match = content.match(/window\.__SSR[\s*]=[\s*]{c:[\s*](\d+)/i);
+      var count = (match != null) ? match[1] : 0;
+
+      jQuery( selcter ).text(count);
+    }
+  });
+}
+//ポケットのストック数を取得
+function getPocketCount(url, selcter) {
+  jQuery.ajax({
+    type: "get", dataType: "xml",
+    url: "http://query.yahooapis.com/v1/public/yql",
+    data: {
+      q: "SELECT content FROM data.headers WHERE url='https://widgets.getpocket.com/v1/button?label=pocket&count=vertical&v=1&url=" + url + "' and ua='#Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.154 Safari/537.36'",
+      format: "xml",
+      env: "http://datatables.org/alltables.env"
+    },
+    success: function (data) {
+      var content = jQuery(data).find("content").text();
+      var match = content.match(/<em id="cnt">(\d+)<\/em>/i);
+      var count = (match != null) ? match[1] : 0;
+
+      jQuery( selcter ).text(count);
+    }
+  });
+}
+$(function(){
+  getTwitterCount('{{ .Permalink }}', '.twitter-count');
+  getHatenaBookmarkCount('{{ .Permalink }}', '.hatena-bookmark-count');
+  getFacebookCount('{{ .Permalink }}', '.facebook-count');
+  getGoogleplusCount('{{ .Permalink }}', '.googleplus-count');
+  getPocketCount('{{ .Permalink }}', '.pocket-count');
+});
+</script>
