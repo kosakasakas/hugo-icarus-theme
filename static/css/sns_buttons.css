@@ -68,6 +68,16 @@
 .share-buttons .inner .pocket-button:active{
     background: #b5392c;
 }
+.share-buttons .inner .line-button{
+    background: #00B900;
+    box-shadow: 0 3px 0 #008a00;
+}
+.share-buttons .inner .line-button:hover{
+    background: #00d100;
+}
+.share-buttons .inner .line-button:active{
+    background: #009400;
+}
 .share-buttons .inner .share-buttons a:active{
     top: 3px;
     box-shadow: none;
@@ -75,6 +85,11 @@
 /* Font Awesome hatena bookmark */
 .fa-hatena:before {
     content: "B!";
+    font-family: Verdana;
+    font-weight: bold
+}
+.fa-line:before {
+    content: "LINE";
     font-family: Verdana;
     font-weight: bold
 }
